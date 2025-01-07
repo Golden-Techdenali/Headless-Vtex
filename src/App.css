@@ -1,0 +1,8 @@
+.App {
+  text-align: center;
+}
+
+.carousel-item img {
+  height: 300px;
+  object-fit: cover;
+}
