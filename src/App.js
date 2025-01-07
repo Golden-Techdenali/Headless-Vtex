@@ -7,9 +7,12 @@ import BrandCarousel from './BrandCarousel';
 function App() {
   return (
     <div className="App">
-      <h1>Brand Showcase</h1>
-      <BrandCarousel />
+    <div className='container texts'>
+    <h1>Brand Showcase</h1>
+    <h1>Techdenali</h1>
     </div>
+    <div className='brandcarousel'> <BrandCarousel /></div>
+  </div>
   );
 }
 

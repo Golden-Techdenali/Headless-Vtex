@@ -45,7 +45,6 @@ const BrandCarousel = () => {
             </Carousel.Caption>
           </Carousel.Item>
         ))}
-        <h1>Shiva</h1>
       </Carousel>
     </div>
   );
