@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "https://techdenalipartnerus.vtexcommercestable.com.br",
-
   "dependencies": {
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
     "cra-template": "1.2.0",
+    "http-proxy-middleware": "^3.0.3",
     "react": "^18.0.0",
     "react-bootstrap": "^2.10.6",
     "react-dom": "^18.0.0",
@@ -38,5 +38,4 @@
       "last 1 safari version"
     ]
   }
-
 }
