@@ -17,13 +17,13 @@ const BrandCarousel = () => {
     9: require('./images/brand9.jpg'),
   };
 
-
+  
   useEffect(() => {
     const fetchBrands = async () => {
       try {
         const apiUrl = '/api/catalog_system/pvt/brand/list'; 
         const token =
-          'eyJhbGciOiJFUzI1NiIsImtpZCI6IjBDMjdDRDE1RDRCRTkwMEVGQjREMkUwMjI2ODgzNDNBQjRERDFEQTAiLCJ0eXAiOiJqd3QifQ.eyJzdWIiOiJsYWxpdGhrdW1hci52b2RhbGFAdGVjaGRlbmFsaS5jb20iLCJhY2NvdW50IjoidGVjaGRlbmFsaXBhcnRuZXJ1cyIsImF1ZGllbmNlIjoiYWRtaW4iLCJzZXNzIjoiODUxMjI0NjItZTEyOC00MjZmLTlhNzYtZWRmNTVlMDZiMzNkIiwiZXhwIjoxNzM2NTE4OTAyLCJ0eXBlIjoidXNlciIsInVzZXJJZCI6ImNiOWU0YTY4LWNlZjAtNGJjYS04NGMyLTIxYjVmNDZjYzU4MCIsImlhdCI6MTczNjQzMjUwMiwiaXNSZXByZXNlbnRhdGl2ZSI6ZmFsc2UsImlzcyI6InRva2VuLWVtaXR0ZXIiLCJqdGkiOiI1YmUzZTQ0MS1iYzJlLTRkZTgtOGY4Ni0wZDNjNzk0OTg4MGIifQ.tNRWZ6zSkyIeq54R63wWiuDByLx7jr7vA7neFngdvahLH6U9w6DNW8YDBUn4fgz2KlfvEy3XwpmqhaIb4Lqh5g'; // Replace with your actual token
+          'eyJhbGciOiJFUzI1NiIsImtpZCI6IkM1OUNBREY1OTBDRUYwODUyODhFNkQ0NUM0NTlDOUYwNDM4RTg0RkQiLCJ0eXAiOiJqd3QifQ.eyJzdWIiOiJsYWxpdGhrdW1hci52b2RhbGFAdGVjaGRlbmFsaS5jb20iLCJhY2NvdW50IjoidGVjaGRlbmFsaXBhcnRuZXJ1cyIsImF1ZGllbmNlIjoiYWRtaW4iLCJzZXNzIjoiZTgxZTE5ZGEtNmIzZS00YWQ1LWJhMzUtZjllMmFmM2Q4ODkxIiwiZXhwIjoxNzM2NDMwNjk2LCJ0eXBlIjoidXNlciIsInVzZXJJZCI6ImNiOWU0YTY4LWNlZjAtNGJjYS04NGMyLTIxYjVmNDZjYzU4MCIsImlhdCI6MTczNjM0NDI5NiwiaXNSZXByZXNlbnRhdGl2ZSI6ZmFsc2UsImlzcyI6InRva2VuLWVtaXR0ZXIiLCJqdGkiOiIwY2QyNTUxMC0xMmExLTRlOTQtOWJiMC1lMzEyM2JjYjdjMWUifQ.xTmQ1WYXDldlDIG1vDKHAy2xk_5i087h3uUPfMKkCJkQ8NGqJJXacDp6kc2TJjWs7iokssqUBMVWBCxVGaLcFQ'; // Replace with your actual token
 
         const response = await fetch(apiUrl, {
           method: 'GET',
@@ -40,10 +40,10 @@ const BrandCarousel = () => {
 
         const data = await response.json();
 
-      
+       
         const combinedData = data.map((brand) => ({
           ...brand,
-          imageUrl: brandImages[brand.id],
+          imageUrl: brandImages[brand.id], 
         }));
 
         setBrands(combinedData);
@@ -53,7 +53,7 @@ const BrandCarousel = () => {
         
         const localFallback = Object.keys(brandImages).map((key) => ({
           id: parseInt(key),
-          name: `Brand ${key}`,
+          name: `Brand ${key}`, 
           imageUrl: brandImages[key],
         }));
 
@@ -62,7 +62,8 @@ const BrandCarousel = () => {
     };
 
     fetchBrands();
-  }, []);
+  }, []); 
+
   return (
     <div>
       <Carousel>
