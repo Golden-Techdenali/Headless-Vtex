@@ -40,7 +40,7 @@ const BrandCarousel = () => {
         // Combine brand data with the image URLs
         const combinedData = data.map((brand) => ({
           ...brand,
-          imageUrl: brandImages[brand.id],
+          imageUrl: brandImages[brand.id], 
         }));
 
         setBrands(combinedData);
@@ -50,7 +50,7 @@ const BrandCarousel = () => {
         // Fallback to local images if fetch fails
         const localFallback = Object.keys(brandImages).map((key) => ({
           id: parseInt(key),
-          name: `Brand ${key}`,
+          name: `Brand ${key}`, 
           imageUrl: brandImages[key],
         }));
 
