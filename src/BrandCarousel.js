@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Carousel } from 'react-bootstrap';
+import { VtexAppKey, VtexAppToken } from './constants';
 
 const BrandCarousel = () => {
   const [brands, setBrands] = useState([]);
 
-  
   const brandImages = {
     1: require('./images/brand1.jpg'),
     2: require('./images/brand2.jpg'),
@@ -17,20 +17,17 @@ const BrandCarousel = () => {
     9: require('./images/brand9.jpg'),
   };
 
-
   useEffect(() => {
     const fetchBrands = async () => {
       try {
         const apiUrl = '/api/catalog_system/pvt/brand/list'; 
-        const token =
-          'eyJhbGciOiJFUzI1NiIsImtpZCI6IjBDMjdDRDE1RDRCRTkwMEVGQjREMkUwMjI2ODgzNDNBQjRERDFEQTAiLCJ0eXAiOiJqd3QifQ.eyJzdWIiOiJsYWxpdGhrdW1hci52b2RhbGFAdGVjaGRlbmFsaS5jb20iLCJhY2NvdW50IjoidGVjaGRlbmFsaXBhcnRuZXJ1cyIsImF1ZGllbmNlIjoiYWRtaW4iLCJzZXNzIjoiODUxMjI0NjItZTEyOC00MjZmLTlhNzYtZWRmNTVlMDZiMzNkIiwiZXhwIjoxNzM2NTE4OTAyLCJ0eXBlIjoidXNlciIsInVzZXJJZCI6ImNiOWU0YTY4LWNlZjAtNGJjYS04NGMyLTIxYjVmNDZjYzU4MCIsImlhdCI6MTczNjQzMjUwMiwiaXNSZXByZXNlbnRhdGl2ZSI6ZmFsc2UsImlzcyI6InRva2VuLWVtaXR0ZXIiLCJqdGkiOiI1YmUzZTQ0MS1iYzJlLTRkZTgtOGY4Ni0wZDNjNzk0OTg4MGIifQ.tNRWZ6zSkyIeq54R63wWiuDByLx7jr7vA7neFngdvahLH6U9w6DNW8YDBUn4fgz2KlfvEy3XwpmqhaIb4Lqh5g'; // Replace with your actual token
-
         const response = await fetch(apiUrl, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            VtexIdclientAutCookie: token,
+            'X-VTEX-API-AppKey': VtexAppKey,
+            'X-VTEX-API-AppToken': VtexAppToken,
           },
         });
 
@@ -40,7 +37,7 @@ const BrandCarousel = () => {
 
         const data = await response.json();
 
-      
+        // Combine brand data with the image URLs
         const combinedData = data.map((brand) => ({
           ...brand,
           imageUrl: brandImages[brand.id],
@@ -50,7 +47,7 @@ const BrandCarousel = () => {
       } catch (error) {
         console.error('Error fetching brands:', error);
 
-        
+        // Fallback to local images if fetch fails
         const localFallback = Object.keys(brandImages).map((key) => ({
           id: parseInt(key),
           name: `Brand ${key}`,
@@ -62,7 +59,8 @@ const BrandCarousel = () => {
     };
 
     fetchBrands();
-  }, []);
+  }, []); // No need to add brandImages in the dependency array since it's a constant
+
   return (
     <div>
       <Carousel>
@@ -70,7 +68,7 @@ const BrandCarousel = () => {
           <Carousel.Item key={index}>
             <img
               className="d-block w-100"
-              src={brand.imageUrl} 
+              src={brand.imageUrl}
               alt={brand.name}
             />
             <Carousel.Caption>
