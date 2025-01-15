@@ -10,8 +10,9 @@ const PORT = process.env.PORT || 5000;
 
 const API_URL = 'https://techdenalipartnerus.vtexcommercestable.com.br';
 const PRICE_API_URL = 'https://api.vtex.com/techdenalipartnerus/pricing/prices/';
-
-
+const CREATE_CART_URL = `${API_URL}/api/checkout/pub/orderForm`;
+const ADD_TO_CART_URL = `${API_URL}/api/checkout/pub/orderForm/{orderFormId}/items`;
+app.use(express.json());
 app.get('/api/brands', async (req, res) => {
   try {
     const response = await axios.get(`${API_URL}/api/catalog_system/pvt/brand/list`, {
@@ -62,6 +63,74 @@ app.get('/api/product/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch product details' });
   }
 });
+app.post('/api/cart', async (req, res) => {
+  try {
+    const response = await axios.post(
+      CREATE_CART_URL,
+      {}, // No body is required for creating an order form
+      {
+        headers: {
+          'X-VTEX-API-AppKey': VtexAppKey,
+          'X-VTEX-API-AppToken': VtexAppToken,
+        },
+      }
+    );
+
+    res.json(response.data); // Return the created order form data
+  } catch (error) {
+    console.error('Error creating cart:', error);
+    res.status(500).json({ error: 'Failed to create cart' });
+  }
+});
+
+// Endpoint to add items to a cart
+app.post('/api/cart/:orderFormId/add', async (req, res) => {
+  const { orderFormId } = req.params;
+  const { orderItems } = req.body;
+
+  if (!orderItems || !Array.isArray(orderItems)) {
+    return res.status(400).json({ error: 'Invalid or missing orderItems in the request body' });
+  }
+
+  try {
+    const response = await axios.post(
+      ADD_TO_CART_URL.replace('{orderFormId}', orderFormId),
+      { orderItems },
+      {
+        headers: {
+          'X-VTEX-API-AppKey': VtexAppKey,
+          'X-VTEX-API-AppToken': VtexAppToken,
+        },
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error adding items to cart:', error);
+    res.status(500).json({ error: 'Failed to add items to cart' });
+  }
+});
+
+// Endpoint to fetch cart details by orderFormId
+app.get('/api/checkout/pub/orderForm/:orderFormId', async (req, res) => {
+  const { orderFormId } = req.params;
+
+  try {
+    const response = await axios.get(`${API_URL}/api/checkout/pub/orderForm/${orderFormId}`, {
+      headers: {
+        'X-VTEX-API-AppKey': VtexAppKey,
+        'X-VTEX-API-AppToken': VtexAppToken,
+      },
+    });
+
+    // Return the order form details
+    res.json(response.data);
+  } catch (error) {
+    console.error(`Error fetching cart details for orderFormId: ${orderFormId}`, error);
+    res.status(500).json({ error: 'Failed to fetch cart details' });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

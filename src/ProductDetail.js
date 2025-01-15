@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';  // Import useNavigat
 import { VtexAppKey, VtexAppToken } from './constants';
 
 const API_URL = '/api/product/';
-const CREATE_CART_URL = '/api/checkout/pub/orderForm';
-const ADD_TO_CART_URL = '/api/checkout/pub/orderForm/{orderFormId}/items';
+//const CREATE_CART_URL = '/api/checkout/pub/orderForm';
+const ADD_TO_CART_URL = '/api/cart/{orderFormId}/add';
 
 const productImages = {
   4: require('./images/product4.jpg'),
@@ -61,7 +61,7 @@ function ProductDetail() {
 
     try {
       // Step 1: Create a new order form (cart)
-      const createCartResponse = await fetch(CREATE_CART_URL, {
+      const createCartResponse = await fetch('/api/cart', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
