@@ -2,18 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';  // Import useNavigate hook
 import { VtexAppKey, VtexAppToken } from './constants';
 
-const API_URL = '/api/catalog/pvt/product/';
+const API_URL = '/api/product/';
 const CREATE_CART_URL = '/api/checkout/pub/orderForm';
 const ADD_TO_CART_URL = '/api/checkout/pub/orderForm/{orderFormId}/items';
-const productPrices = {
-  1: 49.99,
-  2: 79.99,
-  3: 99.99,
-};
+
 const productImages = {
-  1: require('./images/product1.jpg'),
+  4: require('./images/product4.jpg'),
   2: require('./images/product2.jpg'),
   3: require('./images/product3.jpg'),
+  5: require('./images/product1.jpg'),
 };
 
 function ProductDetail() {
@@ -43,10 +40,10 @@ function ProductDetail() {
         const data = await response.json();
         setProduct({
           id,
-          name: data.Name,
-          description: data.Description,
+          name: data.name,
+          description: data.description,
           image: productImages[id] || null,
-          price: productPrices[id] || 0,
+          price: data.price|| 0,
         });
       } catch (err) {
         setError(err.message);

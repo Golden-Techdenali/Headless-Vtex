@@ -20,7 +20,7 @@ const BrandCarousel = () => {
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const apiUrl = '/api/catalog_system/pvt/brand/list'; 
+        const apiUrl = '/api/brands'; 
         const response = await fetch(apiUrl, {
           method: 'GET',
           headers: {

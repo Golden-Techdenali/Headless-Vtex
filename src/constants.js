@@ -1,3 +1,3 @@
 const VtexAppKey = 'vtexappkey-techdenalipartnerus-HPIPQB';
 const VtexAppToken = 'IJZQFEZIPUCWQOTFRKKAVKDRBIPWSSOTIMWUQZRDDZSGEYRCDVYFXUNHDIKRKOYGPWMWAPWUZBPITWOGAZHHIXXNMLPBKEANTNVFNKBXCRCMUQZEONATAOXQPYFTABAG';
-export { VtexAppKey, VtexAppToken };
+module.exports = { VtexAppKey, VtexAppToken };
