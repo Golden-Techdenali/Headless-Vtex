@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import BrandCarousel from './BrandCarousel';
 import ProductList from './ProductList';
 import ProductDetail from './ProductDetail'; // Import your PDP component
+import CartPages from './CartPages';
 
 function App() {
   const location = useLocation(); // Hook to determine the current route
@@ -27,6 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={<ProductList />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/cart" element={<CartPages />} />
         </Routes>
       </div>
     </div>
