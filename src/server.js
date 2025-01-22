@@ -1,7 +1,7 @@
-const { VtexAppKey, VtexAppToken } = require('./constants');
 const express = require('express');
 const axios = require('axios');
 const dotenv = require('dotenv');
+const { VtexAppKey, VtexAppToken } = require('./constants');
 
 dotenv.config();
 
@@ -12,7 +12,18 @@ const API_URL = 'https://techdenalipartnerus.vtexcommercestable.com.br';
 const PRICE_API_URL = 'https://api.vtex.com/techdenalipartnerus/pricing/prices/';
 const CREATE_CART_URL = `${API_URL}/api/checkout/pub/orderForm`;
 const ADD_TO_CART_URL = `${API_URL}/api/checkout/pub/orderForm/{orderFormId}/items`;
+
 app.use(express.json());
+
+// Enable CORS for the frontend
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
+// Endpoint to fetch brand list
 app.get('/api/brands', async (req, res) => {
   try {
     const response = await axios.get(`${API_URL}/api/catalog_system/pvt/brand/list`, {
@@ -22,7 +33,6 @@ app.get('/api/brands', async (req, res) => {
       },
     });
 
-    // Send back the brand list to the client
     res.json(response.data);
   } catch (error) {
     console.error('Error fetching brand list:', error);
@@ -30,11 +40,11 @@ app.get('/api/brands', async (req, res) => {
   }
 });
 
+// Endpoint to fetch product details and price
 app.get('/api/product/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Fetch product details
     const productResponse = await axios.get(`${API_URL}/api/catalog/pvt/product/${id}`, {
       headers: {
         'X-VTEX-API-AppKey': VtexAppKey,
@@ -42,7 +52,6 @@ app.get('/api/product/:id', async (req, res) => {
       },
     });
 
-    // Fetch product price
     const priceResponse = await axios.get(`${PRICE_API_URL}${id}`, {
       headers: {
         'X-VTEX-API-AppKey': VtexAppKey,
@@ -54,7 +63,7 @@ app.get('/api/product/:id', async (req, res) => {
       id,
       name: productResponse.data.Name,
       description: productResponse.data.Description,
-      price: priceResponse.data.basePrice || 0, // Adjust based on actual response structure
+      price: priceResponse.data.basePrice || 0,
     };
 
     res.json(product);
@@ -63,11 +72,13 @@ app.get('/api/product/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch product details' });
   }
 });
+
+// Endpoint to create a cart
 app.post('/api/cart', async (req, res) => {
   try {
     const response = await axios.post(
       CREATE_CART_URL,
-      {}, // No body is required for creating an order form
+      {},
       {
         headers: {
           'X-VTEX-API-AppKey': VtexAppKey,
@@ -76,7 +87,7 @@ app.post('/api/cart', async (req, res) => {
       }
     );
 
-    res.json(response.data); // Return the created order form data
+    res.json(response.data);
   } catch (error) {
     console.error('Error creating cart:', error);
     res.status(500).json({ error: 'Failed to create cart' });
@@ -123,7 +134,6 @@ app.get('/api/checkout/pub/orderForm/:orderFormId', async (req, res) => {
       },
     });
 
-    // Return the order form details
     res.json(response.data);
   } catch (error) {
     console.error(`Error fetching cart details for orderFormId: ${orderFormId}`, error);
@@ -131,6 +141,30 @@ app.get('/api/checkout/pub/orderForm/:orderFormId', async (req, res) => {
   }
 });
 
+// Endpoint to fetch pickup points
+app.get('/api/pickup-points', async (req, res) => {
+  const { postalCode, countryCode } = req.query;
+
+  console.log('Received query parameters:', { postalCode, countryCode });
+
+  if (!postalCode || !countryCode) {
+    console.error('Missing parameters');
+    return res.status(400).json({ error: 'postalCode and countryCode are required.' });
+  }
+
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/checkout/pub/pickup-points?postalCode=${postalCode}&countryCode=${countryCode}`
+    );
+
+    console.log('Pickup Points Response:', response.data);
+
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching pickup points:', error.message);
+    res.status(500).json({ error: 'Failed to fetch pickup points.' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
