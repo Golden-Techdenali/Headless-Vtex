@@ -67,7 +67,7 @@
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   text-align: center;
-  width: 300px;
+  width: 50%;
 }
 
 .popup-content input {
@@ -79,5 +79,81 @@
 .popup-content button {
   margin: 5px;
   padding: 8px 12px;
+}
+
+.pickup-points-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pickup-points-list {
+  list-style: none;
+  padding: 0;
+}
+
+.pickup-point-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.pickup-point-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.pickup-point-items-list {
+  display: flex;
+  flex-wrap: wrap; /* Allows items to wrap to the next line if needed */
+  gap: 15px; /* Adds spacing between items */
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+.pickup-item {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  flex: 1 1 calc(50% - 15px); /* Adjust width to 50% minus gap */
+  max-width: calc(50% - 15px); /* Ensures the max width respects the flex-basis */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pickup-item p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.no-items {
+  padding: 10px;
+  font-style: italic;
+  color: #999;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .pickup-point-card {
+    padding: 10px;
+  }
+
+  .pickup-item {
+    flex: 1 1 100%; /* Make items full width on smaller screens */
+    max-width: 100%;
+  }
+
+  .pickup-item p {
+    font-size: 14px;
+  }
 }
 

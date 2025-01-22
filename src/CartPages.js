@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 function CartPages() {
   const location = useLocation();
-  const { orderFormId } = location.state || {}; // Get the orderFormId from the navigation state
+  const { orderFormId } = location.state || {};
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -50,11 +50,11 @@ function CartPages() {
   }, [orderFormId]);
 
   const handleButtonClick = () => {
-    setShowPopup(true); // Open popup
+    setShowPopup(true);
   };
 
   const handleClosePopup = () => {
-    setShowPopup(false); // Close popup
+    setShowPopup(false);
     setZipcode('');
     setCountrycode('');
     setPickupPoints([]);
@@ -66,9 +66,7 @@ function CartPages() {
       setPickupError('Please provide both zipcode and country code.');
       return;
     }
-  
-    console.log('Searching for pickup points with:', { zipcode, countrycode });
-  
+
     try {
       const response = await fetch(
         `http://localhost:5000/api/pickup-points?postalCode=${zipcode}&countryCode=${countrycode}`,
@@ -80,28 +78,21 @@ function CartPages() {
           },
         }
       );
-  
-      console.log('API Response:', response);
-  
+
       if (!response.ok) {
         throw new Error('Failed to fetch pickup points');
       }
-  
-      const data = await response.json();
-      console.log('Pickup Points Data:', data);
-  
-      setPickupPoints(data);
-      setPickupError(null);
-  // Alert when the response is successful
-  alert('Response is okay. Pickup points fetched successfully!');
 
+      const data = await response.json();
+      const pointsArray = Array.isArray(data) ? data : [data];
+      setPickupPoints(pointsArray);
+      setPickupError(null);
     } catch (err) {
       console.error('Error fetching pickup points:', err.message);
       setPickupPoints([]);
       setPickupError(err.message);
     }
   };
-  
 
   if (loading) {
     return <div>Loading your cart...</div>;
@@ -131,7 +122,6 @@ function CartPages() {
         ))}
       </div>
 
-      {/* Render Popup if showPopup is true */}
       {showPopup && (
         <div className="popup">
           <div className="popup-content">
@@ -158,20 +148,42 @@ function CartPages() {
             <button onClick={handleClosePopup}>Close</button>
             {pickupError && <p style={{ color: 'red' }}>{pickupError}</p>}
             {pickupPoints.length > 0 && (
-              <div>
-                <h3>Pickup Points:</h3>
-                <ul>
-                  {pickupPoints.map((point, index) => (
-                    <li key={index}>
-                      <strong>Name:</strong> {point.name}
-                      <br />
-                      <strong>Address:</strong> {point.address.street}, {point.address.city}, {point.address.state}
-                      <br />
-                      <strong>Postal Code:</strong> {point.address.postalCode}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <div className="pickup-points-container">
+              <h3>Pickup Points:</h3>
+              <ul className="pickup-points-list">
+                {pickupPoints.map((point, pointIndex) => (
+                  <li key={pointIndex} className="pickup-point-card">
+                    
+                    <ul className="pickup-point-items-list">
+                      {point.items && Array.isArray(point.items) ? (
+                        point.items.map((item, itemIndex) => (
+                          <li key={itemIndex} className="pickup-item">
+                            <strong>Item {itemIndex + 1}:</strong>
+                            <p>
+                              <strong>Friendly Name:</strong> {item.pickupPoint?.friendlyName || 'N/A'}
+                            </p>
+                            <p>
+                              <strong>Street:</strong> {item.pickupPoint?.address?.street || 'N/A'}
+                            </p>
+                            <p>
+                              <strong>City:</strong> {item.pickupPoint?.address?.city || 'N/A'}
+                            </p>
+                           
+                            <p>
+                              <strong>Distance:</strong> {item.distance || 'N/A'} km
+                            </p>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="no-items">No items available</li>
+                      )}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            
             )}
           </div>
         </div>
