@@ -7,6 +7,7 @@ import ProductList from './ProductList';
 import ProductDetail from './ProductDetail'; // Import your PDP component
 import CartPages from './CartPages';
 
+
 function App() {
   const location = useLocation(); // Hook to determine the current route
 
