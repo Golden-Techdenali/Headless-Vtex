@@ -66,10 +66,12 @@ function CartPages() {
       setPickupError('Please provide both zipcode and country code.');
       return;
     }
-
+  
+    console.log('Searching for pickup points with:', { zipcode, countrycode });
+  
     try {
       const response = await fetch(
-        `https://techdenalipartnerus.vtexcommercestable.com.br/api/checkout/pub/pickup-points?postalCode=${zipcode}&countryCode=${countrycode}`,
+        `http://localhost:5000/api/pickup-points?postalCode=${zipcode}&countryCode=${countrycode}`,
         {
           method: 'GET',
           headers: {
@@ -78,19 +80,28 @@ function CartPages() {
           },
         }
       );
-
+  
+      console.log('API Response:', response);
+  
       if (!response.ok) {
         throw new Error('Failed to fetch pickup points');
       }
-
+  
       const data = await response.json();
+      console.log('Pickup Points Data:', data);
+  
       setPickupPoints(data);
       setPickupError(null);
+  // Alert when the response is successful
+  alert('Response is okay. Pickup points fetched successfully!');
+
     } catch (err) {
+      console.error('Error fetching pickup points:', err.message);
       setPickupPoints([]);
       setPickupError(err.message);
     }
   };
+  
 
   if (loading) {
     return <div>Loading your cart...</div>;
